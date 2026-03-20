@@ -1,2 +1,2 @@
 # Python-Learning
-This contains A-z I learned from the python learning
+Complete Python for Blockchain Analysis: Class Notes and Projects
