@@ -1,1 +1,57 @@
 
+import requests
+
+ENDPOINT = "http://localhost:8080/v1/graphql"
+HEADERS = {"Content-Type": "application/json"}
+
+query = """
+query MyQuery {
+      FiatTokenProxy_Transfer(distinct_on: from, limit: 10) {
+    from
+    id
+    to
+    value
+  }
+}
+"""
+
+response = requests.post(ENDPOINT, json={"query": query}, headers=HEADERS)
+response.raise_for_status()
+
+data = response.json()
+transfers = data["data"]["FiatTokenProxy_Transfer"]
+
+for transfer in transfers:
+    print(transfer)
+{'from': '0x0000000000000000000000000000000000000000', 'id': '84532_6143609_6', 'to': '0x76dc3A752f54Ac674a9559Cc4505116d6427BE55', 'value': '1000'}
+{'from': '0x00000000002E3A39aFEf1132214fEee5a55ce127', 'id': '84532_10661373_6', 'to': '0xAebD731cc6BCA7F3DfDe7B96e39eE1CCEa7436e0', 'value': '1443'}
+{'from': '0x000000000060f6e853447881951574CDd0663530', 'id': '84532_23961835_25', 'to': '0x35c07a47A08Cf34328557ba670ec07389C62B456', 'value': '1'}
+{'from': '0x0000000000AFc904aE9860D9c4B96D7c529c58b8', 'id': '84532_23316444_118', 'to': '0x82B564983aE7274c86695917BBf8C99ECb6F0F8F', 'value': '0'}
+{'from': '0x0000000000dd6Dd248Ab5487218e1C2D7fbB29c9', 'id': '84532_10611782_20', 'to': '0x108F5a0AA2dd69c05D60DCA0f670df42c0bFd9fF', 'value': '2022'}
+{'from': '0x0000000035eb820252C699925Af8ABfad1a97318', 'id': '84532_17577810_25', 'to': '0x08B2f74b438447cA8aaC1A0c17069bBFb7879c98', 'value': '0'}
+{'from': '0x00000001F742029F3A231da920d47c9bC16D750F', 'id': '84532_8895924_3', 'to': '0xEC65C036c0b7d591aed9d1dbe743c984c1291c42', 'value': '1000000'}
+{'from': '0x0000000cF324fEd44fB52E9A519Cbb5Bd8217F77', 'id': '84532_12112453_53', 'to': '0xf53B60F4006cab2b3C4688ce41fD5362427A2A66', 'value': '200000'}
+{'from': '0x0000000f65D503603782d94E78E30C6d05955741', 'id': '84532_19563235_30', 'to': '0xf53B60F4006cab2b3C4688ce41fD5362427A2A66', 'value': '10000000'}
+{'from': '0x0000001089167600c25258Da29d2e2c857ec1689', 'id': '84532_13666459_1', 'to': '0x22644D46e5aE39Fa6b9d9706AaA1d398E5EB8aBc', 'value': '10000000'}
+query = """
+query {
+  FiatTokenProxy_Transfer(
+    where: { value: { _gt: "1000000000000000000" } }
+    order_by: { value: desc }
+    limit: 10
+  ) {
+    from
+    id
+    to
+    value
+  }
+}
+
+"""
+
+response = requests.post(ENDPOINT, json={"query": query}, headers=HEADERS)
+data = response.json()
+
+for transfer in data["data"]["FiatTokenProxy_Transfer"]:
+    print(transfer)
+# print(data)
