@@ -55,3 +55,188 @@ data = response.json()
 for transfer in data["data"]["FiatTokenProxy_Transfer"]:
     print(transfer)
 # print(data)
+
+
+
+graphQl
+
+import requests
+
+ENDPOINT = "http://localhost:8080/v1/graphql"
+HEADERS = {"content-type": "application/json"}
+
+query = """
+query MyQuery {
+  FiatTokenProxy_Transfer(limit: 10, order_by: {value: desc}) {
+    id
+    from
+    to
+    value
+  }
+}
+"""
+
+response = requests.post(ENDPOINT, json={"query": query}, headers=HEADERS)
+response.raise_for_status()
+
+data = response.json()
+transfers = data["data"]["FiatTokenProxy_Transfer"]
+
+for transfer in transfers:
+    print(transfer)
+{'id': '84532_4836790_1', 'from': '0x0000000000000000000000000000000000000000', 'to': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'value': '34160387290000000'}
+{'id': '84532_4836579_1', 'from': '0x0000000000000000000000000000000000000000', 'to': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'value': '27671785225440000'}
+{'id': '84532_4957544_1', 'from': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'to': '0x0000000000000000000000000000000000000000', 'value': '25857963019110000'}
+{'id': '84532_20899940_14', 'from': '0x0000000000000000000000000000000000000000', 'to': '0x52EdA770E87565ddB61cc1E9011192c5e3D5CbEc', 'value': '19239201295400000'}
+{'id': '84532_25608494_28', 'from': '0x52EdA770E87565ddB61cc1E9011192c5e3D5CbEc', 'to': '0x0000000000000000000000000000000000000000', 'value': '12239201343000000'}
+{'id': '84532_20899368_23', 'from': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'to': '0x0000000000000000000000000000000000000000', 'value': '9937538489240000'}
+{'id': '84532_4954213_1', 'from': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'to': '0x0000000000000000000000000000000000000000', 'value': '9398949504660000'}
+{'id': '84532_17798109_2', 'from': '0x0000000000000000000000000000000000000000', 'to': '0x75aeb7A70534c90A79b13FF39d7Fd9843fD5f68F', 'value': '7380942743370000'}
+{'id': '84532_4954485_3', 'from': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'to': '0x0000000000000000000000000000000000000000', 'value': '6428219823060000'}
+{'id': '84532_4954808_1', 'from': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'to': '0x0000000000000000000000000000000000000000', 'value': '5731579769640000'}
+# Example 2 — Filter transfers above a minimum value
+query = """
+query {
+  FiatTokenProxy_Transfer(
+    where: { value: { _gte: "1000000000000000" } }
+    order_by: { value: desc }
+    limit: 10
+  ) {
+    id
+    from
+    to
+    value
+  }
+}
+"""
+
+response = requests.post(ENDPOINT, json={"query": query}, headers=HEADERS)
+data = response.json()
+for transfer in data["data"]["FiatTokenProxy_Transfer"]:
+    print(transfer)
+{'id': '84532_4836790_1', 'from': '0x0000000000000000000000000000000000000000', 'to': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'value': '34160387290000000'}
+{'id': '84532_29711624_21', 'from': '0x0000000000000000000000000000000000000000', 'to': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'value': '33967977678230000'}
+{'id': '84532_4836579_1', 'from': '0x0000000000000000000000000000000000000000', 'to': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'value': '27671785225440000'}
+{'id': '84532_4957544_1', 'from': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'to': '0x0000000000000000000000000000000000000000', 'value': '25857963019110000'}
+{'id': '84532_20899940_14', 'from': '0x0000000000000000000000000000000000000000', 'to': '0x52EdA770E87565ddB61cc1E9011192c5e3D5CbEc', 'value': '19239201295400000'}
+{'id': '84532_25608494_28', 'from': '0x52EdA770E87565ddB61cc1E9011192c5e3D5CbEc', 'to': '0x0000000000000000000000000000000000000000', 'value': '12239201343000000'}
+{'id': '84532_31531546_7', 'from': '0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391', 'to': '0x0000000000000000000000000000000000000000', 'value': '10091746245850000'}
+{'id': '84532_32659222_24', 'from': '0x75aeb7A70534c90A79b13FF39d7Fd9843fD5f68F', 'to': '0xFf304193b4694b3c374CdebcCec8A60Cb5A87107', 'value': '9999999999000000'}
+{'id': '84532_32658431_103', 'from': '0x0000000000000000000000000000000000000000', 'to': '0x75aeb7A70534c90A79b13FF39d7Fd9843fD5f68F', 'value': '9999999999000000'}
+{'id': '84532_32658588_204', 'from': '0x0000000000000000000000000000000000000000', 'to': '0x75aeb7A70534c90A79b13FF39d7Fd9843fD5f68F', 'value': '9999999999000000'}
+# Example 3 — Transfers from a specific address
+address = "0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391"
+
+query = f"""
+query {{
+  FiatTokenProxy_Transfer(
+    where: {{ from: {{ _eq: "{address}" }} }}
+    order_by: {{ value: desc }}
+    limit: 10
+  ) {{
+    id
+    from
+    to
+    value
+  }}
+}}
+"""
+
+response = requests.post(ENDPOINT, json={"query": query}, headers=HEADERS)
+data = response.json()
+for transfer in data["data"]["FiatTokenProxy_Transfer"]:
+    print(transfer)
+# Example 4 — Aggregate stats: count, sum, avg, max
+query = """
+query {
+  FiatTokenProxy_Transfer_aggregate {
+    aggregate {
+      count
+      sum { value }
+      avg { value }
+      max { value }
+    }
+  }
+}
+"""
+
+response = requests.post(ENDPOINT, json={"query": query}, headers=HEADERS)
+data = response.json()
+agg = data["data"]["FiatTokenProxy_Transfer_aggregate"]["aggregate"]
+print("Total transfers:", agg["count"])
+print("Sum of values  :", agg["sum"]["value"])
+print("Average value  :", agg["avg"]["value"])
+print("Max value      :", agg["max"]["value"])
+# Example 5 — Pagination: browse transfers page by page
+PAGE_SIZE = 5
+
+query = """
+query($limit: Int!, $offset: Int!) {
+  FiatTokenProxy_Transfer(
+    limit: $limit
+    offset: $offset
+    order_by: { value: desc }
+  ) {
+    id
+    from
+    to
+    value
+  }
+}
+"""
+
+for page in range(3):
+    response = requests.post(
+        ENDPOINT,
+        json={"query": query, "variables": {"limit": PAGE_SIZE, "offset": page * PAGE_SIZE}},
+        headers=HEADERS
+    )
+    transfers = response.json()["data"]["FiatTokenProxy_Transfer"]
+    print(f"--- Page {page + 1} ---")
+    for t in transfers:
+        print(t)
+# Example 6 — Transfers involving an address (sent OR received)
+address = "0xFaEc9cDC3Ef75713b48f46057B98BA04885e3391"
+
+query = f"""
+query {{
+  FiatTokenProxy_Transfer(
+    where: {{
+      _or: [
+        {{ from: {{ _eq: "{address}" }} }}
+        {{ to: {{ _eq: "{address}" }} }}
+      ]
+    }}
+    order_by: {{ value: desc }}
+    limit: 10
+  ) {{
+    id
+    from
+    to
+    value
+  }}
+}}
+"""
+
+response = requests.post(ENDPOINT, json={"query": query}, headers=HEADERS)
+data = response.json()
+for transfer in data["data"]["FiatTokenProxy_Transfer"]:
+    direction = "SENT" if transfer["from"] == address else "RECEIVED"
+    print(f"[{direction}]", transfer)
+
+
+
+Envio Indexer
+Please refer to the documentation website for a thorough guide on all Envio indexer features
+
+Run
+pnpm dev
+Visit http://localhost:8080 to see the GraphQL Playground, local password is testing.
+
+Generate files from config.yaml or schema.graphql
+pnpm codegen
+Pre-requisites
+Node.js (use v18 or newer)
+pnpm (use v8 or newer)
+Docker desktop
+
